@@ -1,30 +1,34 @@
-import sys
 from globals import pygame
-from entity import Entity
+from entity  import Entity
+from spritesheet import SpriteSheet
 
 # GLOBALS
 SCREEN_SIZE = (600, 400)
-SCREEN = pygame.display.set_mode(SCREEN_SIZE)
-clock = pygame.time.Clock()
+SCREEN      = pygame.display.set_mode(SCREEN_SIZE)
+clock       = pygame.time.Clock()
 
-pygame.init()
+background  = pygame.image.load("Assets/Test Material.jpg")
 
-e = Entity((100,100),(10,10))
-entity_group = pygame.sprite.Group()
-entity_group.add(e)
+test = SpriteSheet("Assets/TestSpriteSheet.png", (16, 16))
+frames = test.get_frames()
 
-background = pygame.image.load("Assets/Test Material.jpg")
+
+frame = 0
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            frame += 1
 
-    entity_group.draw(SCREEN)
+    frame = frame % len(frames)
+
+    SCREEN.blit(background, (0,0))
+    SCREEN.blit(frames[frame], (200,200))
 
     pygame.display.update()
     clock.tick(60)
 
 pygame.quit()
-sys.exit
