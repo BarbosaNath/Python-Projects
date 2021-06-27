@@ -1,6 +1,5 @@
 from globals import pygame
 from spritesheet import SpriteSheet
-import os
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self, position, size, image_path):
@@ -11,10 +10,10 @@ class Entity(pygame.sprite.Sprite):
         # TODO: add a SpriteSheet to an entity
         self.sprite_sheet = SpriteSheet(image_path,size)
 
-        self.spd   = 1# speed
-        self.dir   = (0,0)# direction list
-        self.position   = position  # position array
-        self.accel = self.dir * self.spd # acceleration array
+        self.spd      = 1        # speed
+        self.dir      = (0,0)    # direction list
+        self.position = position # position array
+        self.accel    = self.dir * self.spd # acceleration array
 
 
     def move(self):
@@ -24,9 +23,6 @@ class Entity(pygame.sprite.Sprite):
     def collide(self):
         pass
     def update(self):
-        os.system("cls")
-        print(self.dir)
-        print(self.position)
         pass
     def render(self):
         pass

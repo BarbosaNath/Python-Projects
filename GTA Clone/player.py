@@ -20,6 +20,9 @@ class Player(Person):
         #Crawl
         #Slide
         #Dash
+        #Trip
+        #In cover
+        #picking itens
 
     def key_input(self, event, is_key_up = False):
         event = event
@@ -35,9 +38,6 @@ class Player(Person):
 
     def update(self):
         super().update()
-        # if self.dir != (0, 0):
-        #     self.state += 0b1
-        # else: self.state -= 0b1
 
         if abs(self.dir[0]) == 1 and abs(self.dir[1]) == 1:
             new_dir  = list(self.dir)
@@ -46,4 +46,3 @@ class Player(Person):
             self.dir = tuple(new_dir)
 
         self.move()
-        #self.dir = (0, 0)
