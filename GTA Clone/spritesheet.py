@@ -1,4 +1,12 @@
 from globals import pygame
+
+try:
+    import numpy as np
+    import pygame.surfarray as surfarray
+except:
+    print("NumPy and Surfarray are required.")
+
+
 class SpriteSheet:
     def __init__(self, image_path, sprite_size):
         self.image       = pygame.image.load(image_path)
@@ -17,6 +25,12 @@ class SpriteSheet:
                     (start[1] * self.sprite_size[1]) + (self.sprite_size[1] *    row)
                 )
                 frames.append(self.image.subsurface(pygame.Rect(location, self.sprite_size)))
+
+        for i in reversed(range(len(frames))):
+            frame_alpha_as_array = surfarray.pixels_alpha(frames[i])
+
+            if not np.any(frame_alpha_as_array) != 0:
+                del(frames[i])
 
         return frames
 
@@ -41,8 +55,12 @@ class SpriteSheet:
         else:
             print("direction should be \"horizontal\" or \"vertical\", you wrote {}".format(direction))
 
-        for i in range(len(frames), 0, -1):
-            # TODO: check for empty frames 
-            pass
+        for i in reversed(range(len(frames))):
+            frame_alpha_as_array = surfarray.pixels_alpha(frames[i])
+
+            if not np.any(frame_alpha_as_array) != 0:
+                del(frames[i])
+            else:
+                break
 
         return frames
