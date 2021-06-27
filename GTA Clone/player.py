@@ -39,8 +39,11 @@ class Player(Person):
         #     self.state += 0b1
         # else: self.state -= 0b1
 
-        # if abs(self.dir[0]) == 1 and abs(self.dir[1]) == 1:
-        #     self.dir *= (0.707, 0.707)
+        if abs(self.dir[0]) == 1 and abs(self.dir[1]) == 1:
+            new_dir  = list(self.dir)
+            new_dir[0] *= 0.707
+            new_dir[1] *= 0.707
+            self.dir = tuple(new_dir)
 
         self.move()
         #self.dir = (0, 0)

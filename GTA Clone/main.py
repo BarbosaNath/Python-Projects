@@ -24,10 +24,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            p.key_input(event.key.get_pressed())
-        if event.type == pygame.KEYUP:
-            p.key_input(event.key, True)
+
+        p.key_input(pygame.key.get_pressed())
+        # if event.type == pygame.KEYUP:
+        #     p.key_input(event.key, True)
         # TODO: corrigir o bug de andar pra sempre
     #     # DEBUGING KEYMAPS
     #         frame += 1

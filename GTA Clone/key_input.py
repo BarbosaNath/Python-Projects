@@ -11,26 +11,21 @@ from pygame.locals import (
 )
 
 
-def MENU_UP(event, is_key_up = False):
-    if event == K_w or event == K_UP:
-        if not is_key_up: return True
-        else: return False
-    else: pass
+def MENU_UP(key, is_key_up = False):
+    if key[K_w] or key[K_UP]: return True
+    else: return False
 
-def MENU_DOWN(event, is_key_up = False):
-    if event == K_s or event == K_DOWN:
-        if not is_key_up: return True
-        else: return False
-    else: pass
 
-def MENU_LEFT(event, is_key_up = False):
-    if event == K_a or event == K_LEFT:
-        if not is_key_up: return True
-        else: return False
-    else: pass
+def MENU_DOWN(key, is_key_up = False):
+    if key[K_s] or key[K_DOWN]: return True
+    else: return False
 
-def MENU_RIGHT(event, is_key_up = False):
-    if event == K_d or event == K_RIGHT:
-        if not is_key_up: return True
-        else: return False
-    else: pass
+
+def MENU_LEFT(key, is_key_up = False):
+    if key[K_a] or key[K_LEFT]: return True
+    else: return False
+
+
+def MENU_RIGHT(key, is_key_up = False):
+    if key[K_d] or key[K_RIGHT]: return True
+    else: return False
