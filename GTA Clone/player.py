@@ -1,28 +1,21 @@
-from entity import Person
+from person import Person
 import key_input as K
 
 class Player(Person):
     def __init__(self, position, size, image_path):
         super().__init__(position, size, image_path)
-        self.state = 0b0000000
-        # Bit index    6543210
-        # 0 = Moving
-        # 1 = Running
-        # 2 = Dodging
-        # 3 = Taking damage
-        # 4 = Dealing damage
-        # 5 = Dieing
-        # 6 = In cutscene
+        self.animations = {
+            "walking" : self.sprite_sheet.get_frames(),
+            "idle"    : [self.sprite_sheet.get_frame()]
+        }
+        self.state = {
+            "walking" : False,
+            "running" : False,
+            "dodging" : False,
+            "idle"    : False
+        }
+        self.current_animation = "idle"
 
-        ##Unused
-        #Parry
-        #Jump
-        #Crawl
-        #Slide
-        #Dash
-        #Trip
-        #In cover
-        #picking itens
 
     def key_input(self, event, is_key_up = False):
         event = event
@@ -38,6 +31,18 @@ class Player(Person):
 
     def update(self):
         super().update()
+
+        if self.dir != (0,0):
+            self.state["walking"] = True
+        else: self.state["walking"] = False
+
+
+
+        if self.state["walking"]:
+            self.current_animation = "walking"
+        else: self.current_animation = "idle"
+
+        self.animate()
 
         if abs(self.dir[0]) == 1 and abs(self.dir[1]) == 1:
             new_dir  = list(self.dir)

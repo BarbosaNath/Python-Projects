@@ -8,8 +8,9 @@ clock       = pygame.time.Clock()
 
 background  = pygame.image.load("Assets/Debug/bg.jpg")
 
-p = Player( ( 0,  0),  (16, 16), "Assets/Debug/sprite_sheet.png")
+p = Player(( 200,  200),  (16, 16), "Assets/Debug/sprite_sheet.png")
 
+player_group = pygame.sprite.Group(p)
 
 running = True
 while running:
@@ -19,9 +20,9 @@ while running:
 
 
     p.key_input(pygame.key.get_pressed())
-    p.update()
     SCREEN.blit(background, (0,0))
-    SCREEN.blit(p.image, p.position)
+    player_group.update()
+    player_group.draw(SCREEN)
 
 
     pygame.display.update()

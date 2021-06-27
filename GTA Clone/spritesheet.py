@@ -14,9 +14,12 @@ class SpriteSheet:
         self.columns     = (int)(self.image.get_rect()[2]/sprite_size[0])
         self.rows        = (int)(self.image.get_rect()[3]/sprite_size[1])
 
-    def get_frames(self, start = (0,0), end = None):
-        frames = []
+    def get_frame(self, position = (0, 0)):
+        frame = self.image.subsurface(pygame.Rect((position[0] * self.sprite_size[0], position[1] * self.sprite_size[1]), self.sprite_size))
+        return frame
 
+    def get_frames(self, start = (0, 0), end = None):
+        frames = []
 
         for row in range(self.rows - start[1]):
             for column in range(self.columns - start[0]):
