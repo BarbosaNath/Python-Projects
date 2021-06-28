@@ -16,7 +16,7 @@ class Player(Person):
             "idle"    : False
         }
         self.current_animation = "idle"
-        self.spd = 4
+        self.spd = 2
 
 
     def key_input(self, event, is_key_up = False):

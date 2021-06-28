@@ -18,18 +18,16 @@ class Entity(pygame.sprite.Sprite):
 
         self.state = {}
 
-        self.spd      = 10        # speed
+        self.spd      = 1        # speed
         self.dir      = (0,0)    # direction list
         self.position = position # position array
         self.accel    = self.dir * self.spd # acceleration array
 
 
     def move(self):
-        print (self.accel)
         accel_x = self.dir[0] * self.spd
         accel_y = self.dir[1] * self.spd
         self.accel = (accel_x, accel_y)
-        print (self.accel)
         self.position  = [x + y for x, y in zip(self.position, self.accel)]
 
     def scale_sprite(self, scale):
