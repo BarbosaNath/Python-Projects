@@ -38,8 +38,6 @@ class Entity(pygame.sprite.Sprite):
                     self.image.get_size()[1]*scale[1]
                 )
             )
-            #self.rect. = self.image.get_size()
-            # TODO: Checar aquele erro quando setta o novo rect
 
     def collide(self):
         # TODO: fazer sistema de colisão
