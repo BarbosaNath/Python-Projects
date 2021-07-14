@@ -1,5 +1,6 @@
 from globals import pygame
 from spritesheet import SpriteSheet
+vec = pygame.math.Vector2
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self, position, size, image_path, scale = (1, 1)):
@@ -21,8 +22,10 @@ class Entity(pygame.sprite.Sprite):
         self.spd      = 1        # speed
         self.dir      = (0,0)    # direction list
         self.position = position # position array
+        self.camera_position = position
         self.accel    = self.dir * self.spd # acceleration array
 
+        self.camera = None
 
     def move(self):
         accel_x = self.dir[0] * self.spd
@@ -56,5 +59,10 @@ class Entity(pygame.sprite.Sprite):
         self.scale_sprite(self.scale)
 
     def update(self):
-        self.rect.center = self.position
+        # self.camera_position[0] = self.position[0] - self.camera.offset_float.x
+        # self.camera_position[1] = self.position[1] - self.camera.offset_float.y
+        self.rect.center  = self.position
         self.time_elapsed = pygame.time.get_ticks() % self.animation_speed
+
+    def draw(self, canvas):
+        canvas.blit(self.image, (self.rect.center.x - self.camera.offset.x, self.rect.center.y - self.camera.offset.y))

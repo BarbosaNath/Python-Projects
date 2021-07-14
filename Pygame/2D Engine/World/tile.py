@@ -1,5 +1,5 @@
 class Tile:
-    def __init__(self, name, image, color):
+    def __init__(self, name, image, id):
         self.name  = name
         self.image = image
-        self.color = color
+        self.id = id
