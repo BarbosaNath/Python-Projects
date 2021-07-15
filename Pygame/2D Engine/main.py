@@ -1,11 +1,12 @@
 # <> Imports
 from globals import pygame
 from globals import SCREEN_SIZE
-#from globals import HALF_SCREEN
 from globals import GAME_SCALE
+from globals import HALF_SCREEN
+
 from player  import Player
-from World.tile  import Tile
-from World.world import World
+
+from World.world    import World
 from World.tile_set import TileSet
 
 from camera import Camera
@@ -14,42 +15,50 @@ from camera import Border
 from camera import Auto
 #</>
 
-################### GLOBALS ###################
+#<>################## GLOBALS ###################
 SCREEN      = pygame.display.set_mode(SCREEN_SIZE)
 clock       = pygame.time.Clock()
 vec = pygame.math.Vector2
+#</>
 
-################### Player Loading ###################
+
+#<>################## Player Loading ###################
 p = Player([ SCREEN_SIZE[0]/2,  SCREEN_SIZE[1]/2],  (16, 16), "Assets/Character-sheet.png", GAME_SCALE)
 p.animation_speed = 120
+p.spd = (GAME_SCALE[0]/3)*2
+
+print(p.spd)
 
 player_group = pygame.sprite.Group(p)
+#</>
 
 
-################### World Loading ###################
-ts = TileSet((16,16), "Assets/tile_set.png")
-w = World("Assets/map.png",(16,16), GAME_SCALE,
+#<>################## World Loading ###################
+
+ts = TileSet("Assets/tile_set.png", (16,16))
+w  = World("World/map.csv", (16,16),
     [
-        Tile("Grass" , ts.tiles[0], ( 73, 150, 150)),
-        Tile("Orange", ts.tiles[1], (132,  90,  73)),
-        Tile("Purple", ts.tiles[2], (123,  65,  98))
+        ts.tiles[0],
+        ts.tiles[1],
+        ts.tiles[2]
     ]
 )
+#</>
 
-################### Camera Loading ###################
+#<>################## Camera Loading ###################
 cam = Camera(p)
 p.camera = cam
 w.camera = cam
 follow = Follow(cam, p)
 border = Border(cam, p, (
-        w.rect.x * w.tile_size[0] * w.scale[0],
-        w.rect.y * w.tile_size[1] * w.scale[1],
-        w.rect.w * w.tile_size[0] * w.scale[0],
-        w.rect.h * w.tile_size[1] * w.scale[1]))
+        0        * w.tile_size[0] * GAME_SCALE[0],
+        0        * w.tile_size[1] * GAME_SCALE[1],
+        w.width  * w.tile_size[0] * GAME_SCALE[0],
+        w.height * w.tile_size[1] * GAME_SCALE[1]))
 auto   = Auto(cam, p)
 
 cam.set_method(follow)
-
+# </>
 ################### Game Loop ###################
 running = True
 while running:
@@ -69,33 +78,34 @@ while running:
     cam.scroll()
     w.draw(SCREEN)
 
+
     player_group.update()
-    player_group.draw(SCREEN)
+    p.draw(SCREEN)
 
 
-    print("Camera offset {}".format(cam.offset))
-    print("Player offset {}".format(p.camera.offset))
-    print("World  offset {}".format(w.camera.offset))
-    print()
+    # print("Camera offset {}".format(cam.offset))
+    # print("Player offset {}".format(p.camera.offset))
+    # print("World  offset {}".format(w.camera.offset))
+    # print()
 
     # <> Draw some shit
-    # pygame.draw.circle(
-    #     SCREEN,
-    #     (0,255,0),
-    #     HALF_SCREEN,
-    #     2,
-    # )
-    #
-    # pygame.draw.rect(
-    #     SCREEN,
-    #     (255,0,0),
-    #     p.rect, 1
-    # )
-    # pygame.draw.rect(
-    #     SCREEN,
-    #     (255,0,255),
-    #     p.collide_box, 1
-    # )
+    pygame.draw.circle(
+        SCREEN,
+        (0,255,0),
+        HALF_SCREEN,
+        2,
+    )
+
+    pygame.draw.rect(
+        SCREEN,
+        (255,0,0),
+        p.rect, 1
+    )
+    pygame.draw.rect(
+        SCREEN,
+        (255,0,255),
+        p.collide_box, 1
+    )
     # </>
 
     pygame.display.update()

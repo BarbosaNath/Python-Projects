@@ -1,62 +1,67 @@
-from globals import pygame
+import os, csv, pygame
 from globals import GAME_SCALE
-import csv, os
-vec = pygame.math.Vector2
+from globals import pygame
 class World:
-    def __init__(self, map_path, tile_size, scale = (1,1), tiles = None):
-        self.image = pygame.image.load(map_path)
-        self.rect  = self.image.get_rect()
-        self.tiles = tiles
-        self.scale = scale
+    def __init__(self, file_path, tile_size, tiles_id, method = "csv"):
+        self.file      = file_path
         self.tile_size = tile_size
+        self.tiles_id  = tiles_id
+        self.tiles     = self.load_csv_tiles(file_path) if method == "csv" else self.load_bitmap_tiles
+        self.world_surface = pygame.Surface((self.width,self.height))
+        self.world_surface.set_colorkey((0,0,0))
+        self.load_map()
         self.camera = None
-        self.tile_map = self.get_map(map_path)
 
-    def draw(self,canvas, pos = (0,0)):
-        canvas.blit(self.tile_map, pos)
+    def draw(self, canvas, pos = (0,0)):
+        x, y = pos
+        canvas.blit(self.world_surface, (x - self.camera.offset.x, y - self.camera.offset.y))
 
+    def load_map(self):
+        for tile in self.tiles:
+            tile.draw(self.world_surface)
 
-    def read_csv(self, filename):
+    def read_csv(self,file_path):
         map = []
-        with open(os.path.join(filename)) as data:
-            data = csv.reader(data, delimiter=',')
+        with open(os.path.join(file_path)) as data:
+            data = csv.reader(data, delimiter=",")
             for row in data:
                 map.append(list(row))
         return map
 
-    def load_tiles(self, filename):
+    def load_csv_tiles(self, file_path):
         tiles = []
-        map = self.read_csv(filename)
+        map = self.read_csv(file_path)
         x, y = 0, 0
         for row in map:
             x = 0
-            for id in row:
-                for tile in self.tiles:
-                    if id == tile.id:
-                        tiles.append(tile.image, x*self.tile_size*GAME_SCALE[0],)
+            for tile in row:
+                # for ID in tiles bla bla
+                if tile != '-1':
+                    tiles.append(Tile(self.tiles_id[int(tile)],
+                        (
+                            x * self.tile_size[0] * GAME_SCALE[0],
+                            y * self.tile_size[1] * GAME_SCALE[1]
+                        )))
+                x += 1
+            y += 1
 
+        self.width  = x * self.tile_size[0] * GAME_SCALE[0]
+        self.height = y * self.tile_size[1] * GAME_SCALE[1]
 
+        return tiles
 
-    #
-    # def get_map(self, map_path):
-    #     for x in range(self.rect[2]):
-    #         for y in range(self.rect[3]):
-    #             xpos = (x * self.tile_size[0] * self.scale[0]) - self.camera.offset.x
-    #             ypos = (y * self.tile_size[1] * self.scale[1]) - self.camera.offset.y
-    #             for tile in self.tiles:
-    #                 if tile.color == self.image.get_at((x,y)):
-    #                     canvas.blit(self.scaled_tile(tile.image,self.scale), (xpos, ypos))
+    def load_bitmap_tiles(self,file_path):
+        pass
 
-    def scaled_tile(self, image, scale):
-        scaled_image = pygame.transform.scale(
-            image,
-            (
-                image.get_size()[0]*scale[0],
-                image.get_size()[1]*scale[1],
-            )
-        )
-        return scaled_image
 
 class Tile:
-    def __init__(self):
-        pass
+    def __init__(self, image, pos):
+        self.id     = id
+        self.image  = image
+        self.rect   = image.get_rect()
+        self.scaled = pygame.transform.scale(image, (int(self.rect.w*GAME_SCALE[0]), int(self.rect.h*GAME_SCALE[1])))
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
+    def draw(self, surface):
+        surface.blit(self.scaled, (self.rect.x, self.rect.y))

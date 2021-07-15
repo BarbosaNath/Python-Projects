@@ -1,6 +1,6 @@
 from globals import pygame
 class TileSet:
-    def __init__(self, tile_size, image_path):
+    def __init__(self, image_path, tile_size):
         self.image = pygame.image.load(image_path)
         self.tiles = []
         self.tile_size = tile_size

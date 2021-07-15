@@ -55,7 +55,7 @@ class Border(CamScroll):
     def __init__(self,camera,target,border):
         CamScroll.__init__(self,camera,target)
         self.border = border
-        # barder = (Left, Top, Right, Bottom)
+        # border = (Left, Top, Right, Bottom)
 
     def scroll(self):
         self.camera.offset_float.x += (self.target.rect.center[0] - self.camera.offset_float.x + self.camera.CONST.x)
