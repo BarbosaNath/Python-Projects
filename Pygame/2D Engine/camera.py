@@ -42,14 +42,8 @@ class Follow(CamScroll):
         self.camera.offset_float.x += ((self.target.rect.center[0]) - self.camera.offset_float.x + self.camera.CONST.x)
         self.camera.offset_float.y += ((self.target.rect.center[1]) - self.camera.offset_float.y + self.camera.CONST.y)
 
-        print(self.camera.offset)
-        print(self.target.rect.center)
-
         self.camera.offset.x = int(self.camera.offset_float.x)
         self.camera.offset.y = int(self.camera.offset_float.y)
-
-        print(self.camera.offset)
-        print(self.target.rect.center)
 
 class Border(CamScroll):
     def __init__(self,camera,target,border):

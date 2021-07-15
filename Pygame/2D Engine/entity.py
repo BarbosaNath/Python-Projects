@@ -62,4 +62,4 @@ class Entity(pygame.sprite.Sprite):
         self.time_elapsed = pygame.time.get_ticks() % self.animation_speed
 
     def draw(self, canvas):
-        canvas.blit(self.image, (self.rect.center[0] - self.camera.offset.x, self.rect.center[1] - self.camera.offset.y))
+        canvas.blit(self.image, (self.position[0] - self.camera.offset.x - self.rect.w/2, self.position[1] - self.camera.offset.y - self.rect.h/2))

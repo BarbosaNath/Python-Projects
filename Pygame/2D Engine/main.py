@@ -33,6 +33,7 @@ player_group = pygame.sprite.Group(p)
 #</>
 
 
+
 #<>################## World Loading ###################
 
 ts = TileSet("Assets/tile_set.png", (16,16))
@@ -45,20 +46,20 @@ w  = World("World/map.csv", (16,16),
 )
 #</>
 
+
+
 #<>################## Camera Loading ###################
 cam = Camera(p)
 p.camera = cam
 w.camera = cam
 follow = Follow(cam, p)
-border = Border(cam, p, (
-        0        * w.tile_size[0] * GAME_SCALE[0],
-        0        * w.tile_size[1] * GAME_SCALE[1],
-        w.width  * w.tile_size[0] * GAME_SCALE[0],
-        w.height * w.tile_size[1] * GAME_SCALE[1]))
+border = Border(cam, p, ( 0, 0, w.width, w.height))
 auto   = Auto(cam, p)
 
 cam.set_method(follow)
 # </>
+
+
 ################### Game Loop ###################
 running = True
 while running:
@@ -66,9 +67,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1: cam.set_method(follow); print("Follow")
-            if event.key == pygame.K_2: cam.set_method(border); print("Border")
-            if event.key == pygame.K_3: cam.set_method( auto ); print(" Auto ")
+            if event.key == pygame.K_1: cam.set_method(follow)
+            if event.key == pygame.K_2: cam.set_method(border)
+            if event.key == pygame.K_3: cam.set_method( auto )
 
 
     p.key_input(pygame.key.get_pressed())
@@ -82,24 +83,22 @@ while running:
     player_group.update()
     p.draw(SCREEN)
 
-
-    # print("Camera offset {}".format(cam.offset))
-    # print("Player offset {}".format(p.camera.offset))
-    # print("World  offset {}".format(w.camera.offset))
-    # print()
-
-    # <> Draw some shit
+    # <> Draw debug boxes
     pygame.draw.circle(
         SCREEN,
         (0,255,0),
         HALF_SCREEN,
         2,
     )
-
     pygame.draw.rect(
         SCREEN,
         (255,0,0),
-        p.rect, 1
+        (
+            p.rect.x - cam.offset.x,
+            p.rect.y - cam.offset.y,
+            p.rect.w,
+            p.rect.h,
+        ), 1
     )
     pygame.draw.rect(
         SCREEN,
