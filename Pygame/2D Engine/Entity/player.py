@@ -1,4 +1,4 @@
-from person import Person
+from Entity.person import Person
 from globals import pygame
 from numpy import arctan2, pi
 import key_input as K

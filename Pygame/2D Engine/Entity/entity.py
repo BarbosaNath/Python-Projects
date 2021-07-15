@@ -1,6 +1,5 @@
 from globals import pygame
 from spritesheet import SpriteSheet
-vec = pygame.math.Vector2
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self, position, size, image_path, scale = (1, 1)):
@@ -46,11 +45,11 @@ class Entity(pygame.sprite.Sprite):
         pass
 
     def animate(self):
-        if self.time_elapsed >= self.animation_speed - 60 and not self.frame_changed:
+        if self.time_elapsed  >= self.animation_speed - 60 and not self.frame_changed:
             self.frame_changed = True
-            self.frame_index += 1
+            self.frame_index  += 1
 
-        if self.time_elapsed <= 60:
+        if self.time_elapsed  <= 60:
             self.frame_changed = False
 
         self.frame_index = self.frame_index % len(self.animations[self.current_animation])

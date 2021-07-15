@@ -4,7 +4,7 @@ from globals import SCREEN_SIZE
 from globals import GAME_SCALE
 from globals import HALF_SCREEN
 
-from player  import Player
+from Entity.player  import Player
 
 from World.world    import World
 from World.tile_set import TileSet
@@ -37,7 +37,7 @@ player_group = pygame.sprite.Group(p)
 #<>################## World Loading ###################
 
 ts = TileSet("Assets/tile_set.png", (16,16))
-w  = World("World/map.csv", (16,16),
+w  = World("Assets/debug/map.csv", (16,16),
     [
         ts.tiles[0],
         ts.tiles[1],
