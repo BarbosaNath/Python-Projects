@@ -4,7 +4,7 @@ from spritesheet import SpriteSheet
 class Entity(pygame.sprite.Sprite):
     def __init__(self, position, size, image_path, scale = (1, 1)):
         super().__init__()
-        self.image = pygame.image.load(image_path)
+        self.image = pygame.image.load(image_path).convert()
         self.rect  = self.image.get_rect()
         self.rect.center = position
         self.collide_box = self.rect.copy()
@@ -20,10 +20,14 @@ class Entity(pygame.sprite.Sprite):
 
         self.spd      = 1        # speed
         self.dir      = (0,0)    # direction list
-        self.position = position # position array
+        self.position = list(position) # position array
         self.accel    = self.dir * self.spd # acceleration array
 
+        self.is_colliding = False
+
         self.camera = None
+
+        self.last_position = self.position
 
     def move(self):
         accel_x = self.dir[0] * self.spd
@@ -40,9 +44,41 @@ class Entity(pygame.sprite.Sprite):
                 )
             )
 
-    def collide(self):
-        # TODO: fazer sistema de colisão
-        pass
+
+    def collide(self, tiles):
+        # print(self.last_position)
+        # print(self.position)
+        for tile in tiles:
+            if self.collide_box.colliderect(tile):
+                delta_right  = self.collide_box.right  - tile.right
+                delta_left   = self.collide_box.left   - tile.left
+                delta_top    = self.collide_box.top    - tile.top
+                delta_bottom = self.collide_box.bottom - tile.bottom
+
+                # <> Debug
+                # print()
+                # print("Player")
+                # print("      {}".format(self.collide_box.top))
+                # print(" {}  {}  {} ".format(self.collide_box.left,self.collide_box.bottom,self.collide_box.right))
+                # print()
+                # print("Tile")
+                # print("      {}".format(tile.top))
+                # print(" {}  {}  {} ".format(tile.left,tile.bottom,tile.right))
+                # print()
+                # print("Delta")
+                # print("     {}     ".format(delta_top))
+                # print(" {}  {}  {} ".format(delta_left,delta_bottom,delta_right))
+                # print("############")
+                #</>
+
+                if delta_right < 0: self.position[0] -= 3#(delta_right + self.collide_box.w)
+                if delta_left  > 0: self.position[0] += 3#(delta_left  - self.collide_box.w)
+
+
+                if delta_top    < 0: self.position[1] -= 3
+                if delta_bottom > 0: self.position[1] += 3
+
+        self.last_position = self.position
 
     def animate(self):
         if self.time_elapsed  >= self.animation_speed - 60 and not self.frame_changed:
@@ -59,6 +95,7 @@ class Entity(pygame.sprite.Sprite):
     def update(self):
         self.rect.center  = self.position
         self.time_elapsed = pygame.time.get_ticks() % self.animation_speed
+        self.accel = (0,0)
 
     def draw(self, canvas):
         canvas.blit(self.image, (self.position[0] - self.camera.offset.x - self.rect.w/2, self.position[1] - self.camera.offset.y - self.rect.h/2))

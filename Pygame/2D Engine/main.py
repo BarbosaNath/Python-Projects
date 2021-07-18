@@ -15,21 +15,12 @@ from camera import Border
 from camera import Auto
 #</>
 
+
+
 #<>################## GLOBALS ###################
 SCREEN      = pygame.display.set_mode(SCREEN_SIZE)
 clock       = pygame.time.Clock()
 vec = pygame.math.Vector2
-#</>
-
-
-#<>################## Player Loading ###################
-p = Player([ SCREEN_SIZE[0]/2,  SCREEN_SIZE[1]/2],  (16, 16), "Assets/Character-sheet.png", GAME_SCALE)
-p.animation_speed = 120
-p.spd = (GAME_SCALE[0]/3)*2
-
-print(p.spd)
-
-player_group = pygame.sprite.Group(p)
 #</>
 
 
@@ -42,8 +33,17 @@ w  = World("Assets/debug/map.csv", (16,16),
         ts.tiles[0],
         ts.tiles[1],
         ts.tiles[2]
-    ]
+    ], (1, 2)
 )
+#</>
+
+
+#<>################## Player Loading ###################
+p = Player([w.width//2,  w.height//2],  (16, 16), "Assets/Character-sheet.png", GAME_SCALE)
+p.animation_speed = 120
+p.spd = (GAME_SCALE[0]/3)*2.5
+
+player_group = pygame.sprite.Group(p)
 #</>
 
 
@@ -52,15 +52,18 @@ w  = World("Assets/debug/map.csv", (16,16),
 cam = Camera(p)
 p.camera = cam
 w.camera = cam
-follow = Follow(cam, p)
-border = Border(cam, p, ( 0, 0, w.width, w.height))
+w.camera_offset_x = cam.offset.x
+w.camera_offset_y = cam.offset.y
+follow = Follow(cam, p, (16, 16))
+border = Border(cam, p, ( 0, 0, w.width, w.height), (16,16))
 auto   = Auto(cam, p)
 
 cam.set_method(follow)
 # </>
 
-
-################### Game Loop ###################
+var = 275
+var2 = 235
+#<>################## Game Loop ###################
 running = True
 while running:
     for event in pygame.event.get():
@@ -77,37 +80,50 @@ while running:
     SCREEN.fill((0,0,0))
 
     cam.scroll()
+    w.camera_offset_x = cam.offset.x
+    w.camera_offset_y = cam.offset.y
+
     w.draw(SCREEN)
 
 
     player_group.update()
+
+    p.collide(w.tile_rects)
+
     p.draw(SCREEN)
 
     # <> Draw debug boxes
-    pygame.draw.circle(
-        SCREEN,
-        (0,255,0),
-        HALF_SCREEN,
-        2,
-    )
-    pygame.draw.rect(
-        SCREEN,
-        (255,0,0),
-        (
-            p.rect.x - cam.offset.x,
-            p.rect.y - cam.offset.y,
-            p.rect.w,
-            p.rect.h,
-        ), 1
-    )
-    pygame.draw.rect(
-        SCREEN,
-        (255,0,255),
-        p.collide_box, 1
-    )
+    # pygame.draw.circle(
+    #     SCREEN,
+    #     (0,255,0),
+    #     HALF_SCREEN,
+    #     2,
+    # )
+    # pygame.draw.rect(
+    #     SCREEN,
+    #     (255,0,0),
+    #     (
+    #         p.rect.x - cam.offset.x,
+    #         p.rect.y - cam.offset.y,
+    #         p.rect.w,
+    #         p.rect.h,
+    #     ), 1
+    # )
+    # pygame.draw.rect(
+    #     SCREEN,
+    #     (255,0,255),
+    #     (
+    #         p.collide_box.x - cam.offset.x,
+    #         p.collide_box.y - cam.offset.y,
+    #         p.collide_box.w,
+    #         p.collide_box.h,
+    #     ), 1
+    # )
     # </>
 
     pygame.display.update()
     clock.tick(60)
+#</>
+
 
 pygame.quit()

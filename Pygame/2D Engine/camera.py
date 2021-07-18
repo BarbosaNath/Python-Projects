@@ -1,7 +1,6 @@
 from globals import pygame
 from globals import SCREEN_SIZE
 from globals import HALF_SCREEN
-from globals import GAME_SCALE
 from abc import ABC, abstractmethod
 vec = pygame.math.Vector2
 
@@ -23,9 +22,10 @@ class Camera:
 
 ################### Abstract Scroll Class ###################
 class CamScroll(ABC):
-    def __init__(self, camera, target):
+    def __init__(self, camera, target,cam_lag = (1,1)):
         self.camera = camera
         self.target = target
+        self.cam_lag= cam_lag
 
     @abstractmethod
     def scroll(self):
@@ -35,25 +35,26 @@ class CamScroll(ABC):
 
 
 class Follow(CamScroll):
-    def __init__(self,camera,target):
-        CamScroll.__init__(self,camera,target)
+    def __init__(self,camera,target, cam_lag = (1,1)):
+        CamScroll.__init__(self,camera,target,cam_lag)
+
 
     def scroll(self):
-        self.camera.offset_float.x += ((self.target.rect.center[0]) - self.camera.offset_float.x + self.camera.CONST.x)
-        self.camera.offset_float.y += ((self.target.rect.center[1]) - self.camera.offset_float.y + self.camera.CONST.y)
+        self.camera.offset_float.x += ((self.target.rect.center[0]) - self.camera.offset_float.x + self.camera.CONST.x) /self.cam_lag[0]
+        self.camera.offset_float.y += ((self.target.rect.center[1]) - self.camera.offset_float.y + self.camera.CONST.y) /self.cam_lag[1]
 
         self.camera.offset.x = int(self.camera.offset_float.x)
         self.camera.offset.y = int(self.camera.offset_float.y)
 
 class Border(CamScroll):
-    def __init__(self,camera,target,border):
-        CamScroll.__init__(self,camera,target)
+    def __init__(self,camera,target,border, cam_lag = (1,1)):
+        CamScroll.__init__(self,camera,target,cam_lag)
         self.border = border
         # border = (Left, Top, Right, Bottom)
 
     def scroll(self):
-        self.camera.offset_float.x += (self.target.rect.center[0] - self.camera.offset_float.x + self.camera.CONST.x)
-        self.camera.offset_float.y += (self.target.rect.center[1] - self.camera.offset_float.y + self.camera.CONST.y)
+        self.camera.offset_float.x += (self.target.rect.center[0] - self.camera.offset_float.x + self.camera.CONST.x) /self.cam_lag[0]
+        self.camera.offset_float.y += (self.target.rect.center[1] - self.camera.offset_float.y + self.camera.CONST.y) /self.cam_lag[1]
 
         self.camera.offset.x = int(self.camera.offset_float.x)
         self.camera.offset.y = int(self.camera.offset_float.y)

@@ -1,20 +1,23 @@
 import os, csv, pygame
 from globals import GAME_SCALE
-from globals import pygame
 class World:
-    def __init__(self, file_path, tile_size, tiles_id, method = "csv"):
+    def __init__(self, file_path, tile_size, tiles_id, collidables):
         self.file      = file_path
         self.tile_size = tile_size
+        self.collidables = list(collidables)
+        self.tile_rects = []
         self.tiles_id  = tiles_id
-        self.tiles     = self.load_csv_tiles(file_path) if method == "csv" else self.load_bitmap_tiles
+        self.tiles     = self.load_csv_tiles(file_path) if ".csv" in file_path else self.load_bitmap_tiles
         self.world_surface = pygame.Surface((self.width,self.height))
         self.world_surface.set_colorkey((0,0,0))
         self.load_map()
         self.camera = None
+        self.camera_offset_x=0
+        self.camera_offset_y=0
 
     def draw(self, canvas, pos = (0,0)):
         x, y = pos
-        canvas.blit(self.world_surface, (x - self.camera.offset.x, y - self.camera.offset.y))
+        canvas.blit(self.world_surface, (x - self.camera_offset_x, y - self.camera_offset_y))
 
     def load_map(self):
         for tile in self.tiles:
@@ -23,9 +26,10 @@ class World:
     def read_csv(self,file_path):
         map = []
         with open(os.path.join(file_path)) as data:
-            data = csv.reader(data, delimiter=",")
-            for row in data:
+            m = csv.reader(data, delimiter=",")
+            for row in m:
                 map.append(list(row))
+            data.close()
         return map
 
     def load_csv_tiles(self, file_path):
@@ -35,13 +39,20 @@ class World:
         for row in map:
             x = 0
             for tile in row:
-                # for ID in tiles bla bla
                 if tile != '-1':
                     tiles.append(Tile(self.tiles_id[int(tile)],
                         (
                             x * self.tile_size[0] * GAME_SCALE[0],
                             y * self.tile_size[1] * GAME_SCALE[1]
                         )))
+                    if int(tile) in self.collidables:
+                        self.tile_rects.append(
+                            pygame.Rect(
+                                x * self.tile_size[0] * GAME_SCALE[0],
+                                y * self.tile_size[1] * GAME_SCALE[1],
+                                self.tile_size[0] * GAME_SCALE[0],
+                                self.tile_size[1] * GAME_SCALE[1]
+                            ))
                 x += 1
             y += 1
 
