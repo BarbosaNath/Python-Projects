@@ -13,7 +13,7 @@ class Window(QMainWindow):
     def init_UI(self):
         self.label = QtWidgets.QLabel(self)
         self.label.setText("Hello World")
-        self.label.move(150,150)
+        self.label.move(150, 150)
 
         self.b1 = QtWidgets.QPushButton(self)
         self.b1.setText("Button 1")
@@ -26,12 +26,13 @@ class Window(QMainWindow):
     def update(self):
         self.label.adjustSize()
 
+
 def window():
     app = QApplication(sys.argv)
     win = Window()
 
-
     win.show()
     sys.exit(app.exec_())
+
 
 window()
