@@ -7,7 +7,7 @@ from globals import GAME_SCALE
 from Entity.player import Player
 
 from World.world import World
-# from World.tile_set import TileSet
+from World.tile_set import TileSet
 
 from camera import Camera
 from camera import Follow
@@ -23,8 +23,16 @@ vec = pygame.math.Vector2
 # </>
 
 
-# <>##################  World Loading ###################
-w = World("Assets/Debug/debug_world.json")
+# <>################## World Loading ###################
+
+ts = TileSet("Assets/tile_set.png", (16, 16))
+w = World("Assets/debug/map.csv", (16, 16),
+          [
+    ts.tiles[0],
+    ts.tiles[1],
+    ts.tiles[2]
+], (1, 2)
+)
 # </>
 
 

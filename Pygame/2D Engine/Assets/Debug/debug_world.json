@@ -1,0 +1,9 @@
+{
+  "file_path": "Assets/debug/map.csv",
+  "tile_size": [16, 16],
+  "tile_set": {
+    "file_path": "Assets/tile_set.png"
+  },
+  "tile_images": [0, 1, 2],
+  "collidables": [1, 2]
+}
