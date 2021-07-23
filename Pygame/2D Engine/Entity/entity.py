@@ -20,18 +20,18 @@ class Entity(pygame.sprite.Sprite):
 
         self.state = {}
 
-        self.spd = 1        # speed
+        self.speed = 1        # speed
         self.dir = (0, 0)    # direction list
         self.position = list(position)  # position array
-        self.accel = self.dir * self.spd  # acceleration array
+        self.accel = self.dir * self.speed  # acceleration array
 
         self.is_colliding = False
 
         self.last_position = self.position
 
     def move(self):
-        accel_x = self.dir[0] * self.spd
-        accel_y = self.dir[1] * self.spd
+        accel_x = self.dir[0] * self.speed
+        accel_y = self.dir[1] * self.speed
         self.accel = (accel_x, accel_y)
         self.position = [x + y for x, y in zip(self.position, self.accel)]
 

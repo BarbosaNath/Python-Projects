@@ -31,7 +31,7 @@ w = World("Assets/Debug/debug_world.json")
 p = Player([w.width//2,  w.height//2], (16, 16),
            "Assets/Character.png", GAME_SCALE)
 p.animation_speed = 120
-p.spd = (GAME_SCALE[0]/3)*2.5
+p.speed = (GAME_SCALE[0]/3)*2.5
 
 player_group = pygame.sprite.Group(p)
 # </>
@@ -70,21 +70,16 @@ while running:
     p.key_input(pygame.key.get_pressed())
 
     if pygame.key.get_pressed()[pygame.K_4]:
-        zoom(-.01, 2)
-        w.reset()
-        border = Border(cam, (0, 0, w.width, w.height))
-        if cam.get_method() == "Border":
-            cam.set_method(border)
-        p.spd = (GAME_SCALE[0]/3)*2.5
+        zoom(-.01, 2, [w, p])
 
     if pygame.key.get_pressed()[pygame.K_5]:
-        zoom(.01, 2)
-        w.reset()
-        border = Border(cam, (0, 0, w.width, w.height))
-        if cam.get_method() == "Border":
-            cam.set_method(border)
-        p.spd = (GAME_SCALE[0]/3)*2.5
+        zoom(.01, 2, [w, p])
+
     SCREEN.fill((0, 0, 0))
+
+    border = Border(cam, (0, 0, w.width, w.height))
+    if cam.get_method() == "Border":
+        cam.set_method(border)
 
     cam.scroll()
     w.camera_offset_x = cam.offset.x
@@ -96,9 +91,7 @@ while running:
     w.draw(SCREEN)
 
     player_group.update()
-
     p.collide(w.tile_rects)
-
     p.draw(SCREEN)
 
     # <> Draw debug boxes

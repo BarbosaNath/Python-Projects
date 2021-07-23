@@ -1,5 +1,6 @@
 from Entity.person import Person
 from globals import pygame
+from globals import GAME_SCALE
 from numpy import arctan2, pi
 import key_input as K
 
@@ -65,6 +66,9 @@ class Player(Person):
         self.collide_box[3] = ((self.sprite_sheet.sprite_size[1] - offset[1])
                                * self.scale[1])
         self.collide_box.center = self.rect.center
+
+    def reset(self):
+        self.speed = (GAME_SCALE[0]/3)*2.5
 
     def update(self):
         super().update()
