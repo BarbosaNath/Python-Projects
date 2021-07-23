@@ -28,9 +28,16 @@ class World:
         self.world_surface = pygame.Surface((self.width, self.height))
         self.world_surface.set_colorkey((0, 0, 0))
         self.load_map()
-        self.camera = None
         self.camera_offset_x = 0
         self.camera_offset_y = 0
+
+    def reset(self):
+        self.tile_rects = []
+        self.tiles = self.load_csv_tiles(
+            self.file) if ".csv" in self.file else self.load_bitmap_tiles
+        self.world_surface = pygame.Surface((self.width, self.height))
+        self.world_surface.set_colorkey((0, 0, 0))
+        self.load_map()
 
     def draw(self, canvas, pos=(0, 0)):
         x, y = pos
@@ -66,9 +73,10 @@ class World:
                 if tile != '-1':
                     tiles.append(Tile(self.tile_images[int(tile)],
                                       (
-                        x * self.tile_size[0] * GAME_SCALE[0],
-                        y * self.tile_size[1] * GAME_SCALE[1]
+                        int(x * self.tile_size[0] * GAME_SCALE[0]),
+                        int(y * self.tile_size[1] * GAME_SCALE[1])
                     )))
+
                     if int(tile) in self.collidables:
                         self.tile_rects.append(
                             pygame.Rect(
@@ -94,9 +102,16 @@ class Tile:
         self.id = id
         self.image = image
         self.rect = image.get_rect()
-        self.scaled = pygame.transform.scale(
-            image, (int(self.rect.w*GAME_SCALE[0]),
-                    int(self.rect.h*GAME_SCALE[1])))
+        if (GAME_SCALE[0].is_integer() and GAME_SCALE[1].is_integer()) or \
+                (GAME_SCALE[0]-int(GAME_SCALE[0]) == .5 and
+                 GAME_SCALE[1]-int(GAME_SCALE[1]) == .5):
+            self.scaled = pygame.transform.scale(
+                image, (int(self.rect.w*GAME_SCALE[0]),
+                        int(self.rect.h*GAME_SCALE[1])))
+        else:
+            self.scaled = pygame.transform.scale(
+                image, (int(self.rect.w*GAME_SCALE[0]+1),
+                        int(self.rect.h*GAME_SCALE[1]+1)))
         self.rect.x = pos[0]
         self.rect.y = pos[1]
 

@@ -2,12 +2,11 @@
 from globals import pygame
 from globals import SCREEN_SIZE
 from globals import GAME_SCALE
-# from globals import HALF_SCREEN
+from globals import zoom
 
 from Entity.player import Player
 
 from World.world import World
-# from World.tile_set import TileSet
 
 from camera import Camera
 from camera import Follow
@@ -17,7 +16,7 @@ from camera import Auto
 
 
 # <>################## GLOBALS ###################
-SCREEN = pygame.display.set_mode(SCREEN_SIZE, pygame.SCALED)
+SCREEN = pygame.display.set_mode(SCREEN_SIZE)
 clock = pygame.time.Clock()
 vec = pygame.math.Vector2
 # </>
@@ -30,7 +29,7 @@ w = World("Assets/Debug/debug_world.json")
 
 # <>################## Player Loading ###################
 p = Player([w.width//2,  w.height//2], (16, 16),
-           "Assets/Character-sheet.png", GAME_SCALE)
+           "Assets/Character.png", GAME_SCALE)
 p.animation_speed = 120
 p.spd = (GAME_SCALE[0]/3)*2.5
 
@@ -40,13 +39,11 @@ player_group = pygame.sprite.Group(p)
 
 # <>################## Camera Loading ###################
 cam = Camera(p)
-p.camera = cam
-w.camera = cam
 w.camera_offset_x = cam.offset.x
 w.camera_offset_y = cam.offset.y
-follow = Follow(cam, p, (16, 16))
-border = Border(cam, p, (0, 0, w.width, w.height), (16, 16))
-auto = Auto(cam, p)
+follow = Follow(cam)
+border = Border(cam, (0, 0, w.width, w.height))
+auto = Auto(cam)
 
 cam.set_method(follow)
 # </>
@@ -65,13 +62,36 @@ while running:
             if event.key == pygame.K_3:
                 cam.set_method(auto)
 
+            if event.key == pygame.K_6:
+                cam.move_to((0, 0), follow)
+            if event.key == pygame.K_7:
+                cam.move_to((800, 800), follow)
+
     p.key_input(pygame.key.get_pressed())
 
+    if pygame.key.get_pressed()[pygame.K_4]:
+        zoom(-.01, 2)
+        w.reset()
+        border = Border(cam, (0, 0, w.width, w.height))
+        if cam.get_method() == "Border":
+            cam.set_method(border)
+        p.spd = (GAME_SCALE[0]/3)*2.5
+
+    if pygame.key.get_pressed()[pygame.K_5]:
+        zoom(.01, 2)
+        w.reset()
+        border = Border(cam, (0, 0, w.width, w.height))
+        if cam.get_method() == "Border":
+            cam.set_method(border)
+        p.spd = (GAME_SCALE[0]/3)*2.5
     SCREEN.fill((0, 0, 0))
 
     cam.scroll()
     w.camera_offset_x = cam.offset.x
     w.camera_offset_y = cam.offset.y
+
+    p.camera_offset_x = cam.offset.x
+    p.camera_offset_y = cam.offset.y
 
     w.draw(SCREEN)
 

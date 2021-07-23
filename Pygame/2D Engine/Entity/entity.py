@@ -1,5 +1,6 @@
 from globals import pygame
 from spritesheet import SpriteSheet
+from globals import GAME_SCALE
 
 
 class Entity(pygame.sprite.Sprite):
@@ -26,8 +27,6 @@ class Entity(pygame.sprite.Sprite):
 
         self.is_colliding = False
 
-        self.camera = None
-
         self.last_position = self.position
 
     def move(self):
@@ -40,14 +39,12 @@ class Entity(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(
             self.image,
             (
-                self.image.get_size()[0]*scale[0],
-                self.image.get_size()[1]*scale[1]
+                int(self.image.get_size()[0]*scale[0]),
+                int(self.image.get_size()[1]*scale[1])
             )
         )
 
     def collide(self, tiles):
-        # print(self.last_position)
-        # print(self.position)
         for tile in tiles:
             if self.collide_box.colliderect(tile):
                 delta_right = self.collide_box.right - tile.right
@@ -56,16 +53,14 @@ class Entity(pygame.sprite.Sprite):
                 delta_bottom = self.collide_box.bottom - tile.bottom
 
                 if delta_right < 0:
-                    self.position[0] -= 3  # (delta_right + self.collide_box.w)
+                    self.position[0] -= GAME_SCALE[0] - GAME_SCALE[0]/6
                 if delta_left > 0:
-                    self.position[0] += 3  # (delta_left  - self.collide_box.w)
+                    self.position[0] += GAME_SCALE[0] - GAME_SCALE[0]/6
 
                 if delta_top < 0:
-                    self.position[1] -= 3
+                    self.position[1] -= GAME_SCALE[1] - GAME_SCALE[1]/6
                 if delta_bottom > 0:
-                    self.position[1] += 3
-
-        self.last_position = self.position
+                    self.position[1] += GAME_SCALE[1] - GAME_SCALE[1]/6
 
     def animate(self):
         if (self.time_elapsed >= self.animation_speed - 60 and
@@ -87,6 +82,6 @@ class Entity(pygame.sprite.Sprite):
         self.accel = (0, 0)
 
     def draw(self, canvas):
-        canvas.blit(self.image, (self.position[0] - self.camera.offset.x -
+        canvas.blit(self.image, (self.position[0] - self.camera_offset_x -
                     self.rect.w/2, self.position[1] -
-                    self.camera.offset.y - self.rect.h/2))
+                    self.camera_offset_y - self.rect.h/2))

@@ -15,15 +15,42 @@ class Camera:
     def set_method(self, method):
         self.method = method
 
+    def get_method(self):
+        temp = str(self.method)
+
+        if "Follow" in temp:
+            return "Follow"
+
+        if "Border" in temp:
+            return "Border"
+
+        if "Auto" in temp:
+            return "Auto"
+
+    def set_target(self, target, method=None):
+        self.target = target
+        if method is not None:
+            method.target = self.target
+            self.set_method(method)
+
+    def move_to(self, pos, method=None):
+        focus = CameraFocus(pos)
+        self.set_target(focus)
+        if method is not None:
+            method.target = self.target
+            self.set_method(method)
+        else:
+            self.set_method(Follow(self))
+
     def scroll(self):
         self.method.scroll()
 
 
 # ################## Abstract Scroll Class ###################
 class CamScroll(ABC):
-    def __init__(self, camera, target, cam_lag=(1, 1)):
+    def __init__(self, camera, cam_lag=(16, 16)):
         self.camera = camera
-        self.target = target
+        self.target = camera.target
         self.cam_lag = cam_lag
 
     @abstractmethod
@@ -32,8 +59,8 @@ class CamScroll(ABC):
 
 
 class Follow(CamScroll):
-    def __init__(self, camera, target, cam_lag=(1, 1)):
-        CamScroll.__init__(self, camera, target, cam_lag)
+    def __init__(self, camera, cam_lag=(16, 16)):
+        CamScroll.__init__(self, camera, cam_lag)
 
     def scroll(self):
         self.camera.offset_float.x += (
@@ -48,8 +75,8 @@ class Follow(CamScroll):
 
 
 class Border(CamScroll):
-    def __init__(self, camera, target, border, cam_lag=(1, 1)):
-        CamScroll.__init__(self, camera, target, cam_lag)
+    def __init__(self, camera, border, cam_lag=(16, 16)):
+        CamScroll.__init__(self, camera, cam_lag)
         self.border = border
         # border = (Left, Top, Right, Bottom)
 
@@ -74,8 +101,8 @@ class Border(CamScroll):
 
 
 class Auto(CamScroll):
-    def __init__(self, camera, target, scroll_values=(1, 0)):
-        CamScroll.__init__(self, camera, target)
+    def __init__(self, camera, scroll_values=(1, 0)):
+        CamScroll.__init__(self, camera)
         self.scroll_values = scroll_values
     # scroll_values = (x amount to move per frame, y amount to moce per frame)
 
@@ -85,3 +112,9 @@ class Auto(CamScroll):
 
         self.camera.offset.x = int(self.camera.offset_float.x)
         self.camera.offset.y = int(self.camera.offset_float.y)
+
+
+# #################### Camera Focus Class
+class CameraFocus:
+    def __init__(self, pos):
+        self.rect = pygame.Rect((0, 0), pos)
