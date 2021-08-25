@@ -67,7 +67,7 @@ while running:
             running = False
     p.key_input(pygame.key.get_pressed())
 
-    SCREEN.fill((0, 0, 0))
+    # SCREEN.fill((0, 0, 0))
 
     cam.scroll()
     w.camera_offset_x = cam.offset.x
