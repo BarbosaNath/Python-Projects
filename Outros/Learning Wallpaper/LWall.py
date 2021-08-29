@@ -1,5 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont  # noqa
 import json
+import argparse
+
+parser = argparse.ArgumentParser()
 
 
 def points_to_pixels(_points):
@@ -50,7 +53,7 @@ for word in words:
         split_words[j] += f'{word}\n'
 
     i += 1
-
+del i, j
 mode = 'RGB'
 size = (1920, 1080)
 color = (20, 0, 30)
