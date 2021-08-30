@@ -1,8 +1,11 @@
 from PIL import Image, ImageDraw, ImageFont  # noqa
+import os
 import json
+import ctypes
 import argparse
 from args import args
 
+SPI_SETDESKWALLPAPER = 20
 parser = argparse.ArgumentParser()
 
 
@@ -35,9 +38,26 @@ def draw_words(words, text_obj, color,
         index += 1
 
 
-with open("words.json", "r") as json_file:
-    words = json.load(json_file)["words"]
-# words = ['ありがとう = Obrigado', '雨 = Chuva']
+with open('words.json', 'r') as json_file:
+    words = json.load(json_file)['words']
+
+if args.add != []:
+    for word in args.add:
+        words.append(word)
+    with open('words.json', 'w') as json_file:
+        json.dump({"words": words}, json_file)
+if args.delete != []:
+    for dele in args.delete:
+        i = 0
+        for word in words:
+            if dele == word:
+                del words[i]
+            i += 1
+    del i
+    with open('words.json', 'w') as json_file:
+        json.dump({"words": words}, json_file)
+
+        # words = ['ありがとう = Obrigado', '雨 = Chuva']
 text_offset = args.offset.split('x')
 text_offset = (int(text_offset[0]), int(text_offset[1]))
 
@@ -80,5 +100,10 @@ draw_words(split_words, text, text_color,
 
 # Add Words
 # Save Images
-
-img.show()
+if args.show:
+    img.show()
+if args.save is not None:
+    img.save(args.save)
+if args.set:
+    img.save(os.getcwd() + r'\image.png')
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, os.getcwd() + r'\image.png', 0)

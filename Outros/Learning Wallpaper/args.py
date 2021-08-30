@@ -19,8 +19,11 @@ parser.add_argument('-a', '--add',
                     action='append')
 # --set
 parser.add_argument('-s', '--set',
-                    help='sets the wallpaper',
+                    help='saves the image and set the new wallpaper',
                     action='store_true')
+# --save
+parser.add_argument('--save',
+                    help='saves the image in the provided path')
 # --delete
 parser.add_argument('-d', '--delete',
                     help='deletes the specified word/s',
@@ -52,10 +55,14 @@ parser.add_argument('-r', '--wordsrows',
                     default='5')
 # --offset
 parser.add_argument('-o', '--offset',
-                    help='sets the offset between words (must be formated as the default: 200x1)',
-                    default='200x1')
+                    help='sets the offset between words (must be formated as the default: 200x2)',
+                    default='200x2')
 # --margin
 parser.add_argument('-m', '--margin',
                     help='sets the margin between the border of the image and the words (must be formated as the default: 30x20)',
                     default='30x20')
+# --show
+parser.add_argument('--show',
+                    help='opens result image after the program runs',
+                    action='store_true')
 args = parser.parse_args()
