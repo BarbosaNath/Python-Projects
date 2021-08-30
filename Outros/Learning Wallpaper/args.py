@@ -46,5 +46,16 @@ parser.add_argument('-c', '--color',
 parser.add_argument('-t', '--textcolor',
                     help='set text color in hexadecimal',
                     default='#F0C814')
-
+# --wordsrows
+parser.add_argument('-r', '--wordsrows',
+                    help='sets the quantity of rows before jump to the next column',
+                    default='5')
+# --offset
+parser.add_argument('-o', '--offset',
+                    help='sets the offset between words (must be formated as the default: 200x1)',
+                    default='200x1')
+# --margin
+parser.add_argument('-m', '--margin',
+                    help='sets the margin between the border of the image and the words (must be formated as the default: 30x20)',
+                    default='30x20')
 args = parser.parse_args()
