@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont  # noqa
 import json
 import argparse
+from args import args
 
 parser = argparse.ArgumentParser()
 
@@ -55,13 +56,15 @@ for word in words:
     i += 1
 del i, j
 mode = 'RGB'
-size = (1920, 1080)
-color = (20, 0, 30)
+size = args.imagesize.split('x')
+size[0] = int(size[0])
+size[1] = int(size[1])
+color = args.color
 
 
-text_color = (240, 200, 20)
-text_size = 30
-font = ImageFont.truetype('HachiMaruPop-Regular.ttf', text_size)
+text_color = args.textcolor
+text_size = int(args.fontsize)
+font = ImageFont.truetype(args.font, text_size)
 
 # Create Image
 img = Image.new(mode, size, color)

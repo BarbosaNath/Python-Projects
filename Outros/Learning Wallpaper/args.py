@@ -33,7 +33,7 @@ parser.add_argument('-i', '--imagesize',
 # --font
 parser.add_argument('-f', '--font',
                     help='defines the font to be used in the wallpaper',
-                    default='arial.ttf')
+                    default='HachiMaruPop-Regular.ttf')
 # --fontsize
 parser.add_argument('--fontsize',
                     help='defines the font size in points (default: 30)',
@@ -48,5 +48,3 @@ parser.add_argument('-t', '--textcolor',
                     default='#F0C814')
 
 args = parser.parse_args()
-
-print(args)

@@ -1,3 +1,4 @@
 *.zip
 *.ttf
 *.otf
+__pycache__/
