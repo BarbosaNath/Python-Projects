@@ -1,0 +1,4 @@
+word,meaning,furigana
+雨,Chuva,あめ
+ありがとう,Obrigado
+魔法,Magia,まほう

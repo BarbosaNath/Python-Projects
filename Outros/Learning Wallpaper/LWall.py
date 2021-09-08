@@ -1,14 +1,14 @@
-from PIL import Image, ImageDraw, ImageFont  # noqa
+from PIL import Image, ImageDraw, ImageFont
 import os
+import csv
 import json
 import ctypes
 import argparse
 from args import args
 
 SPI_SETDESKWALLPAPER = 20
-parser = argparse.ArgumentParser()
 
-
+# simple function to convert text points to screen pixels
 def points_to_pixels(_points):
     return _points * 4/3
 
@@ -18,11 +18,11 @@ def draw_words(words, text_obj, color,
                offset=10, margin=10):
     try:
         len(offset)
-    except Exception:
+    except exception:
         offset = [offset, offset]
     try:
         len(margin)
-    except Exception:
+    except exception:
         margin = [margin, margin]
 
     max_len = 0
@@ -37,15 +37,18 @@ def draw_words(words, text_obj, color,
             word, fill=color, font=font)
         index += 1
 
-
+# Open json file containing the words
 with open('words.json', 'r') as json_file:
     words = json.load(json_file)['words']
 
+# Add Words
 if args.add != []:
     for word in args.add:
         words.append(word)
+    # Save new json file
     with open('words.json', 'w') as json_file:
         json.dump({"words": words}, json_file)
+# Remove words
 if args.delete != []:
     for dele in args.delete:
         i = 0
@@ -54,10 +57,10 @@ if args.delete != []:
                 del words[i]
             i += 1
     del i
+    # Save new json file
     with open('words.json', 'w') as json_file:
         json.dump({"words": words}, json_file)
 
-        # words = ['ありがとう = Obrigado', '雨 = Chuva']
 text_offset = args.offset.split('x')
 text_offset = (int(text_offset[0]), int(text_offset[1]))
 
@@ -98,12 +101,11 @@ text = ImageDraw.Draw(img)
 draw_words(split_words, text, text_color,
            font, text_size, offset=text_offset, margin=text_margin)
 
-# Add Words
-# Save Images
 if args.show:
     img.show()
+# Save Images
 if args.save is not None:
     img.save(args.save)
 if args.set:
     img.save(os.getcwd() + r'\image.png')
-    ctypes.windll.user32.SystemParametersInfoW(20, 0, os.getcwd() + r'\image.png', 0)
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, os.getcwd() + r'\image.png', 0)
