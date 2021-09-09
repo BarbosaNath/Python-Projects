@@ -94,10 +94,11 @@ class ImageEditor:
 
         self.image.show()
 
-with open('config.json', 'r') as json_file:
-    config_dict = json.load(json_file)
 
 def reset_editor():
+    with open('config.json', 'r') as json_file:
+        config_dict = json.load(json_file)
+        
     config_dict["text_color"]       = "#fff"
     config_dict["background_color"] = "#000"
     config_dict["furigana_color"]   = "#555"
@@ -119,6 +120,3 @@ def reset_editor():
 
     with open('config.json', 'w') as json_file:
         json.dump(config_dict, json_file)
-
-editor = ImageEditor(config_dict)
-editor.draw()
