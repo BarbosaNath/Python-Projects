@@ -80,7 +80,7 @@ class ImageEditor:
                 self.text.text(furi_pos, furi if furi is not None else '', fill=self.furigana_color,font=self.furigana_font)
 
                 # Draw the meaning of japanese word
-                self.text.text(equal_pos, '=' if mean_len is not None else '', fill=self.text_color, font=self.font)
+                self.text.text(equal_pos, '=' if mean_len != 0 else '', fill=self.text_color, font=self.font)
                 self.text.text(mean_pos, mean if mean is not None else '', fill=self.text_color, font=self.font)
                 i += 1
                 # print(f'{pos} | {screen_size}')
