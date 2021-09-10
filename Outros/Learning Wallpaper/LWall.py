@@ -3,6 +3,7 @@ import os
 import csv
 import json
 import ctypes
+import pandas as pd
 import argparse
 from Editor import ImageEditor, reset_editor
 from args import args
@@ -28,23 +29,20 @@ if args.add != []:
 
 # Remove words
 if args.delete != []:
-    for dele in args.delete:
-        i = 0
-        for word in words:
-            if dele == word:
-                del words[i]
-            i += 1
-    del i
-    # Save new json file
-    with open('words.json', 'w') as json_file:
-        json.dump({"words": words}, json_file)
+    for word_del in args.delete:
+        csv_file = pd.read_csv(editor.file_path)
+        csv_file.get_index('word', inplace(True))
+        csv_file.drop(word_del)
+        csv_file.to_csv(editor.file_path)
 
+# recreated the editor so any new config is updated
+editor = ImageEditor(config_dict)
 
 if args.show:
-    img.show()
+    editor.draw().show()
 # Save Images
 if args.save is not None:
-    img.save(args.save)
+    editor.draw().save(args.save)
 if args.set:
-    img.save(os.getcwd() + r'\image.png')
+    editor.draw().save(os.getcwd() + r'\image.png')
     ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, os.getcwd() + r'\image.png', 0)

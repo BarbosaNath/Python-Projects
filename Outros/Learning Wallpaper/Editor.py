@@ -92,13 +92,13 @@ class ImageEditor:
                 del pos, furi_pos, mean_pos
             del i, j
 
-        self.image.show()
+        return self.image
 
 
 def reset_editor():
     with open('config.json', 'r') as json_file:
         config_dict = json.load(json_file)
-        
+
     config_dict["text_color"]       = "#fff"
     config_dict["background_color"] = "#000"
     config_dict["furigana_color"]   = "#555"
@@ -119,4 +119,4 @@ def reset_editor():
     config_dict["font"]   = "HachiMaruPop-Regular.ttf"
 
     with open('config.json', 'w') as json_file:
-        json.dump(config_dict, json_file)
+        json.dump(config_dict, json_file, indent=4)
