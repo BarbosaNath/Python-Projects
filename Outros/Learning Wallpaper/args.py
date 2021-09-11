@@ -31,32 +31,22 @@ parser.add_argument('-d', '--delete',
                     action='append')
 # --imagesize
 parser.add_argument('-i', '--imagesize',
-                    help='defines the size of the output image (must be formated as the default: 1920x1080)',
-                    default='1920x1080')
+                    help='defines the size of the output image (must be formated as the default: 1920x1080)')
 # --font
 parser.add_argument('-f', '--font',
-                    help='defines the font to be used in the wallpaper',
-                    default='HachiMaruPop-Regular.ttf')
+                    help='defines the font to be used in the wallpaper')
 # --fontsize
 parser.add_argument('--fontsize',
-                    help='defines the font size in points (default: 30)',
-                    default='30')
+                    help='defines the font size in points (default: 50)')
 # --color
 parser.add_argument('-c', '--color',
-                    help='set background color in hexadecimal',
-                    default='#14001E')
+                    help='set background color in hexadecimal')
 # --textcolor
 parser.add_argument('-t', '--textcolor',
-                    help='set text color in hexadecimal',
-                    default='#F0C814')
-# --wordsrows
-parser.add_argument('-r', '--wordsrows',
-                    help='sets the quantity of rows before jump to the next column',
-                    default='5')
+                    help='set text color in hexadecimal')
 # --offset
 parser.add_argument('-o', '--offset',
-                    help='sets the offset between words (must be formated as the default: 200x2)',
-                    default='200x2')
+                    help='sets the offset between words (default: 80)')
 # --margin
 parser.add_argument('-m', '--margin',
                     help='sets the margin between the border of the image and the words (must be formated as the default: 30x20)',
@@ -65,4 +55,17 @@ parser.add_argument('-m', '--margin',
 parser.add_argument('--show',
                     help='opens result image after the program runs',
                     action='store_true')
+
+parser.add_argument('--furigana_color',
+                    help='set furigana color to the parsed hexadecimal value')
+
+parser.add_argument('--furigana_ratio',
+                    help='set the how much smaller the furigana should be compared to the normal text (furigana size = text size / furigana ratio)')
+parser.add_argument('--furigana_offset',
+                    help='how far away from the text should the furigana be')
+parser.add_argument('--word_file',
+                    help='where the csv file containing the words should be')
+
+parser.add_argument('-r','--reset_config', help='reset config file', action='store_true')
+
 args = parser.parse_args()

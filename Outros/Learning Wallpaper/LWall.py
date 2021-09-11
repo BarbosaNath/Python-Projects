@@ -10,6 +10,28 @@ from args import args
 
 SPI_SETDESKWALLPAPER = 20
 
+def str_to_list(_str):
+    if _str is not None:
+        tup = _str.split('x')
+        return [int(tup[0]), int(tup[1])]
+    else:
+        return None
+
+def to_int(value):
+    if value is not None:
+        return int(value)
+    return value
+
+def to_float(value):
+    if value is not None:
+        return float(value)
+    return value
+
+def update_config(config_dict, config, arg):
+    if arg is not None:
+        config_dict[config] = arg
+    return config_dict
+
 def add_to_csv(words, path):
     for word in words:
         word = word.split(',')
@@ -19,9 +41,10 @@ def add_to_csv(words, path):
 
 def delete_from_csv(words, path):
     for word_del in words:
+        print(word_del)
         csv_file = pd.read_csv(path)
-        csv_file.get_index('word', inplace(True))
-        csv_file.drop(word_del)
+        csv_file = csv_file.drop(csv_file[csv_file.word==word_del].index)
+        print(csv_file[csv_file.word==word_del].index)
         csv_file.to_csv(path)
 
 
@@ -29,10 +52,39 @@ def delete_from_csv(words, path):
 with open('config.json', 'r') as json_file:
     config_dict = json.load(json_file)
 
+
 # Create a new object with the configurations in the json file
 editor = ImageEditor(config_dict)
 
+##### json configuration file related
+margin = str_to_list(args.margin)
+margin = margin if margin is not None else [None,None]
+config_dict = update_config(config_dict, 'font', args.font)
+config_dict = update_config(config_dict, 'fontsize', to_int(args.fontsize))
 
+config_dict = update_config(config_dict, 'image_size', str_to_list(args.imagesize))
+
+config_dict = update_config(config_dict, 'text_color', args.textcolor)
+config_dict = update_config(config_dict, 'background_color', args.color)
+
+config_dict = update_config(config_dict, 'offset', to_float(args.offset))
+
+config_dict = update_config(config_dict, 'left_margin', margin[0])
+config_dict = update_config(config_dict, 'top_margin',  margin[1])
+
+config_dict = update_config(config_dict, 'furigana_ratio', to_float(args.furigana_ratio))
+config_dict = update_config(config_dict, 'furigana_offset', to_float(args.furigana_offset))
+config_dict = update_config(config_dict, 'furigana_color', args.furigana_color)
+
+config_dict = update_config(config_dict, 'file_path', args.word_file)
+
+# Save new config
+with open('config.json', 'w') as json_file:
+    json.dump(config_dict, json_file, indent=4)
+
+if args.reset_config: reset_editor()
+
+##### csv word file related
 # Add Words
 if args.add != []: add_to_csv(args.add, editor.file_path)
 # Remove words

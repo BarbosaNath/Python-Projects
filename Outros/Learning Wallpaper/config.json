@@ -1,1 +1,17 @@
-{"text_color": "#fff", "background_color": "#000", "furigana_color": "#555", "file_path": "words.csv", "image_size": [1920, 1080], "top_margin": 20, "left_margin": 20, "font_size": 50, "furigana_ratio": 1.5, "furigana_offset": 3, "offset": 80, "font": "HachiMaruPop-Regular.ttf"}
+{
+    "text_color": "#fff",
+    "background_color": "#000",
+    "furigana_color": "#555",
+    "file_path": "words.csv",
+    "image_size": [
+        1920,
+        1080
+    ],
+    "top_margin": 20,
+    "left_margin": 30,
+    "font_size": 50,
+    "furigana_ratio": 1.5,
+    "furigana_offset": 3,
+    "offset": 80,
+    "font": "HachiMaruPop-Regular.ttf"
+}
