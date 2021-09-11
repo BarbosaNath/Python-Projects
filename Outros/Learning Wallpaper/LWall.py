@@ -41,11 +41,12 @@ def add_to_csv(words, path):
 
 def delete_from_csv(words, path):
     for word_del in words:
-        print(word_del)
         csv_file = pd.read_csv(path)
-        csv_file = csv_file.drop(csv_file[csv_file.word==word_del].index)
-        print(csv_file[csv_file.word==word_del].index)
+        csv_file.set_index('word', inplace=True)
+        csv_file = csv_file.drop(word_del)
         csv_file.to_csv(path)
+
+
 
 
 # Open json file containing the configuration

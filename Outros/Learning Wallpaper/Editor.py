@@ -37,8 +37,10 @@ class ImageEditor:
         with open(self.file_path, encoding='utf8') as csv_file:
             self.csv_reader = csv.DictReader(csv_file)
             for row in self.csv_reader:
-                self.longest_word = self.font.getlength(row['word']) if self.font.getlength(row['word']) > self.longest_word else self.longest_word
-                self.longest_meaning = self.font.getlength(row['meaning']) if self.font.getlength(row['meaning']) > self.longest_meaning else self.longest_meaning
+                if isinstance(row['word'], str):
+                    self.longest_word = self.font.getlength(row['word']) if self.font.getlength(row['word']) > self.longest_word else self.longest_word
+                if isinstance(row['meaning'], str):
+                    self.longest_meaning = self.font.getlength(row['meaning']) if self.font.getlength(row['meaning']) > self.longest_meaning else self.longest_meaning
 
         self.column_space = (self.longest_word
                           +  self.longest_meaning
@@ -55,9 +57,9 @@ class ImageEditor:
             self.csv_reader = csv.DictReader(csv_file)
             for row in self.csv_reader:
                 # get atributes from dict
-                word = row['word']
-                mean = row['meaning']
-                furi = row['furigana']
+                word = row['word'] if row['word'] is not None else ''
+                mean = row['meaning'] if row['meaning'] is not None else ''
+                furi = row['furigana'] if row['furigana'] is not None else ''
                 mean_len = self.font.getlength(mean)
 
                 # position of the japanese word
