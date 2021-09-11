@@ -66,6 +66,7 @@ parser.add_argument('--furigana_offset',
 parser.add_argument('--word_file',
                     help='where the csv file containing the words should be')
 
-parser.add_argument('-r','--reset_config', help='reset config file', action='store_true')
+parser.add_argument('-r','--reset_config',
+                    help='reset config file', action='store_true')
 
 args = parser.parse_args()

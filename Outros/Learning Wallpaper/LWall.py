@@ -61,7 +61,7 @@ editor = ImageEditor(config_dict)
 margin = str_to_list(args.margin)
 margin = margin if margin is not None else [None,None]
 config_dict = update_config(config_dict, 'font', args.font)
-config_dict = update_config(config_dict, 'fontsize', to_int(args.fontsize))
+config_dict = update_config(config_dict, 'font_size', to_int(args.fontsize))
 
 config_dict = update_config(config_dict, 'image_size', str_to_list(args.imagesize))
 

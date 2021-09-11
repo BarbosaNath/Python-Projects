@@ -1,7 +1,7 @@
 {
     "text_color": "#fff",
     "background_color": "#000",
-    "furigana_color": "#555",
+    "furigana_color": "#ddd",
     "file_path": "words.csv",
     "image_size": [
         1920,
@@ -13,5 +13,5 @@
     "furigana_ratio": 1.5,
     "furigana_offset": 3,
     "offset": 80,
-    "font": "HachiMaruPop-Regular.ttf"
+    "font": "HachiMaruPop-Regular.ttf",
 }
