@@ -33,15 +33,15 @@ class ImageEditor:
         self.furigana_font = ImageFont.truetype(config_dict['font'], int(self.furigana_size))
 
 
-        self.longest_word    = 0
-        self.longest_meaning = 0
         with open(self.file_path, encoding='utf8') as csv_file:
             self.csv_reader = csv.DictReader(csv_file)
+            self.len_words = 0
             for row in self.csv_reader:
-                if isinstance(row['word'], str):
-                    self.longest_word = self.font.getlength(row['word']) if self.font.getlength(row['word']) > self.longest_word else self.longest_word
-                if isinstance(row['meaning'], str):
-                    self.longest_meaning = self.font.getlength(row['meaning']) if self.font.getlength(row['meaning']) > self.longest_meaning else self.longest_meaning
+                self.len_words += 1
+
+        self.longest_word = longest_meaning = 0
+        self.longest_word, self.longest_meaning = self.get_longest(self.len_words//2)
+
 
         self.column_space = (self.longest_word
                           +  self.longest_meaning
@@ -49,6 +49,21 @@ class ImageEditor:
 
         self.image  = Image.new('RGB', self.image_size, self.background_color)
         self.text = ImageDraw.Draw(self.image)
+
+    def get_longest(self, break_point):
+        longest_word = longest_meaning = 0
+        with open(self.file_path, encoding='utf8') as csv_file:
+            self.csv_reader = csv.DictReader(csv_file)
+            i=0
+            for row in self.csv_reader:
+                if isinstance(row['word'], str):
+                    longest_word = self.font.getlength(row['word']) if self.font.getlength(row['word']) > longest_word else longest_word
+                if isinstance(row['meaning'], str):
+                    longest_meaning = self.font.getlength(row['meaning']) if self.font.getlength(row['meaning']) > longest_meaning else longest_meaning
+                if i >= break_point:
+                    break
+                i+=1
+        return longest_word, longest_meaning
 
 
     def draw(self):
@@ -83,13 +98,13 @@ class ImageEditor:
                 self.text.text(furi_pos, furi if furi is not None else '', fill=self.furigana_color,font=self.furigana_font)
 
                 # Draw the meaning of japanese word
-                # self.text.text(equal_pos, '=' if mean_len != 0 else '', fill=self.text_color, font=self.font)
                 self.text.text(mean_pos, mean if mean is not None else '', fill=self.text_color, font=self.font)
                 i += 1
                 # print(f'{pos} | {screen_size}')
                 if pos[1] >= self.image_size[1] - self.line_space - self.font_size*1.4:
                     j+=1
                     i=1
+                    self.longest_word, self.longest_meaning = self.get_longest(self.len_words)
                 if pos[0] >= self.image_size[0]:
                     break
                 del pos, furi_pos, mean_pos
