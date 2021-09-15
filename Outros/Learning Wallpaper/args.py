@@ -49,8 +49,7 @@ parser.add_argument('-o', '--offset',
                     help='sets the offset between words (default: 80)')
 # --margin
 parser.add_argument('-m', '--margin',
-                    help='sets the margin between the border of the image and the words (must be formated as the default: 30x20)',
-                    default='30x20')
+                    help='sets the margin between the border of the image and the words (must be formated as the default: 30x20)')
 # --show
 parser.add_argument('--show',
                     help='opens result image after the program runs',

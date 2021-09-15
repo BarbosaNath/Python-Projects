@@ -4,14 +4,14 @@
     "furigana_color": "#ddd",
     "file_path": "words.csv",
     "image_size": [
-        1920,
-        1080
+        1440,
+        800
     ],
-    "top_margin": 20,
-    "left_margin": 30,
-    "font_size": 50,
+    "top_margin": 0,
+    "left_margin": 60,
+    "font_size": 30,
     "furigana_ratio": 1.5,
     "furigana_offset": 3,
-    "offset": 80,
-    "font": "HachiMaruPop-Regular.ttf",
+    "offset": 30.0,
+    "font": "HachiMaruPop-Regular.ttf"
 }
