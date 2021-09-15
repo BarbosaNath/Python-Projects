@@ -32,12 +32,11 @@ class ImageEditor:
         self.font          = ImageFont.truetype(config_dict['font'], self.font_size)
         self.furigana_font = ImageFont.truetype(config_dict['font'], int(self.furigana_size))
 
-
-        with open(self.file_path, encoding='utf8') as csv_file:
-            self.csv_reader = csv.DictReader(csv_file)
-            self.len_words = 0
-            for row in self.csv_reader:
-                self.len_words += 1
+        self.len_words = 0
+        def get_len_words(csv_file):
+            for word in csv_file:
+                self.len_words+=1
+        self.open_csv(get_len_words)
 
         self.longest_word = longest_meaning = 0
         self.longest_word, self.longest_meaning = self.get_longest(self.len_words//2)
@@ -49,6 +48,14 @@ class ImageEditor:
 
         self.image  = Image.new('RGB', self.image_size, self.background_color)
         self.text = ImageDraw.Draw(self.image)
+
+    def open_csv(self, funct):
+        with open(self.file_path, encoding='utf8') as csv_file:
+            self.csv_reader = csv.DictReader(csv_file)
+            funct(self.csv_reader)
+            pass
+
+
 
     def get_longest(self, break_point):
         longest_word = longest_meaning = 0
@@ -73,8 +80,8 @@ class ImageEditor:
             self.csv_reader = csv.DictReader(csv_file)
             for row in self.csv_reader:
                 # get atributes from dict
-                word = row['word'] if row['word'] is not None else ''
-                mean = row['meaning'] if row['meaning'] is not None else ''
+                word = row[    'word'] if row[    'word'] is not None else ''
+                mean = row[ 'meaning'] if row[ 'meaning'] is not None else ''
                 furi = row['furigana'] if row['furigana'] is not None else ''
                 mean_len = self.font.getlength(mean)
 
